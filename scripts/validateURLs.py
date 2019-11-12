@@ -49,7 +49,7 @@ def main():
 
     for inRow in inRows:
         url = inRow[0]
-        urlIsValid =  validators.url(url)
+        urlIsValid = validators.url(url)
 
         # Add items to output row
         outRow = [url, urlIsValid]
