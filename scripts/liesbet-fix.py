@@ -67,5 +67,9 @@ def main():
             if str(parentDirIn).startswith(rootDirIn):
                 dirRel = Path(*parentDirIn.parts[rootInLevels:])
                 dirOut = Path.joinpath(Path(rootDirOut), dirRel)
-                print(dirOut)
+
+                # Create output directory if it doesn't exist already
+                if not os.path.isdir(dirOut):
+                    Path(dirOut).mkdir(parents=True, exist_ok=True)
+
 main()
