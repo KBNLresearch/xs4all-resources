@@ -2,10 +2,11 @@
 import os
 import sys
 from bs4 import BeautifulSoup
+from pathlib import Path
 
 def printWarning(msg):
     """Print warning to stderr."""
-    msgString = ("User warning: " + msg + "\n")
+    msgString = ("WARNING: " + msg + "\n")
     sys.stderr.write(msgString)
 
 def main():
@@ -21,11 +22,11 @@ def main():
         for subdir in subdirs:
             subdir_path = os.path.join(root, subdir)
             dirsIn.append(subdir_path)
-            
+
         for filename in files:
             file_path = os.path.join(root, filename)
             filesIn.append(file_path)
-    
+
     # Extract href hyperlink targets from all HTML files
     for fileIn in filesIn:
         if fileIn.endswith(('.htm', 'html', '.HTM', '.HTML')):
@@ -36,7 +37,15 @@ def main():
                         linkTarget = link.get('href')
                         if linkTarget is not None:
                             if not linkTarget.startswith(('http:', 'mailto:', 'javascript:')):
-                                linksLocal.append(linkTarget)
+                                pathLocal = Path(fileIn).parent
+                                pathParent = pathLocal.parent
+                                if linkTarget.startswith('../'):
+                                    # Fix links that are relative to parent dir
+                                    linkTargetAbs = Path.joinpath(pathParent, linkTarget[len('../'):])
+                                else:
+                                    linkTargetAbs = Path.joinpath(pathLocal, linkTarget)
+
+                                linksLocal.append(linkTargetAbs)
                 except UnicodeDecodeError:
                     # Print warning and ignore this file
                     msg = "Decode error parsing file " + fileIn
