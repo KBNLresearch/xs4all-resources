@@ -10,15 +10,15 @@ def printWarning(msg):
     sys.stderr.write(msgString)
 
 def main():
-    dirIn = "/home/johan/kb/liesbets-atelier/liesbets-atelier/Homepage-html/"
-    dirOut = "/home/johan/kb/liesbets-atelier/test/Homepage-html/"
+    rootDirIn = "/home/johan/kb/liesbets-atelier/liesbets-atelier/Homepage-html"
+    rootDirOut = "/home/johan/kb/liesbets-atelier/test/Homepage-html"
 
     dirsIn = []
     filesIn = []
     linksLocal = []
 
     # Get full paths to all files and folders in input directory
-    for root, subdirs, files in os.walk(dirIn):
+    for root, subdirs, files in os.walk(rootDirIn):
         for subdir in subdirs:
             subdir_path = os.path.join(root, subdir)
             dirsIn.append(subdir_path)
@@ -58,8 +58,14 @@ def main():
     for fileIn in filesIn:
         print('\t- file ' + fileIn)
     """
+    rootInLevels = len(rootDirIn.split("/"))
+
+    # Create output directory structure, using directory names from hyperlink targets
     for linkLocal in linksLocal:
-        print(linkLocal)
-
-
+        parentDirIn = Path(linkLocal).parent
+        if parentDirIn is not None:
+            if str(parentDirIn).startswith(rootDirIn):
+                dirRel = Path(*parentDirIn.parts[rootInLevels:])
+                dirOut = Path.joinpath(Path(rootDirOut), dirRel)
+                print(dirOut)
 main()
