@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 import os
 import sys
+import shutil
 from bs4 import BeautifulSoup
 from pathlib import Path
 
@@ -10,8 +11,8 @@ def printWarning(msg):
     sys.stderr.write(msgString)
 
 def main():
-    rootDirIn = "/home/johan/kb/liesbets-atelier/liesbets-atelier/Homepage-html"
-    rootDirOut = "/home/johan/kb/liesbets-atelier/test/Homepage-html"
+    rootDirIn = "/home/johan/kb/liesbets-atelier/liesbets-atelier/Homepage-html/HOMEPAGE"
+    rootDirOut = "/home/johan/kb/liesbets-atelier/test/HOMEPAGE"
 
     dirsIn = []
     filesIn = []
@@ -46,6 +47,19 @@ def main():
                                     linkTargetAbs = Path.joinpath(pathLocal, linkTarget)
 
                                 linksLocal.append(linkTargetAbs)
+                    for image in soup.find_all('img'):
+                        imageSource = image.get('src')
+                        if imageSource is not None:
+                            pathLocal = Path(fileIn).parent
+                            pathParent = pathLocal.parent
+                            if imageSource.startswith('../'):
+                                # Fix links that are relative to parent dir
+                                imageSourceAbs = Path.joinpath(pathParent, imageSource[len('../'):])
+                            else:
+                                imageSourceAbs = Path.joinpath(pathLocal, imageSource)
+
+                            linksLocal.append(imageSourceAbs)
+
                 except UnicodeDecodeError:
                     # Print warning and ignore this file
                     msg = "Decode error parsing file " + fileIn
@@ -56,13 +70,16 @@ def main():
         print('\t- subdirectory ' + dirIn)
 
     for fileIn in filesIn:
-        print('\t- file ' + fileIn)
+        print(fileIn)
     """
+
     rootInLevels = len(rootDirIn.split("/"))
 
     # Create output directory structure, using directory names from hyperlink targets
     for linkLocal in linksLocal:
+        #print(linkLocal)
         parentDirIn = Path(linkLocal).parent
+        fileName = Path(linkLocal).name
         if parentDirIn is not None:
             if str(parentDirIn).startswith(rootDirIn):
                 dirRel = Path(*parentDirIn.parts[rootInLevels:])
@@ -70,6 +87,17 @@ def main():
 
                 # Create output directory if it doesn't exist already
                 if not os.path.isdir(dirOut):
+                    #pass
                     Path(dirOut).mkdir(parents=True, exist_ok=True)
+                
+                # Lookup corresponding file in input directory tree
+                for fileIn in filesIn:
+                    if str(fileIn).upper() == str(linkLocal).upper():
+                        from_file = fileIn
+                        to_file = Path.joinpath(dirOut, fileName)
+                        #print(from_file, to_file)
+                        shutil.copy(str(from_file), str(to_file))
+
+
 
 main()
