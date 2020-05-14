@@ -50,15 +50,16 @@ def main():
                     for image in soup.find_all('img'):
                         imageSource = image.get('src')
                         if imageSource is not None:
-                            pathLocal = Path(fileIn).parent
-                            pathParent = pathLocal.parent
-                            if imageSource.startswith('../'):
-                                # Fix links that are relative to parent dir
-                                imageSourceAbs = Path.joinpath(pathParent, imageSource[len('../'):])
-                            else:
-                                imageSourceAbs = Path.joinpath(pathLocal, imageSource)
+                            if not imageSource.startswith(('http:')):
+                                pathLocal = Path(fileIn).parent
+                                pathParent = pathLocal.parent
+                                if imageSource.startswith('../'):
+                                    # Fix links that are relative to parent dir
+                                    imageSourceAbs = Path.joinpath(pathParent, imageSource[len('../'):])
+                                else:
+                                    imageSourceAbs = Path.joinpath(pathLocal, imageSource)
 
-                            linksLocal.append(imageSourceAbs)
+                                linksLocal.append(imageSourceAbs)
 
                 except UnicodeDecodeError:
                     # Print warning and ignore this file
@@ -96,7 +97,7 @@ def main():
                         from_file = fileIn
                         to_file = Path.joinpath(dirOut, fileName)
                         #print(from_file, to_file)
-                        shutil.copy(str(from_file), str(to_file))
+                        #shutil.copy(str(from_file), str(to_file))
 
 
 
