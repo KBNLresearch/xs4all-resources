@@ -78,7 +78,7 @@ def main():
 
     # Create output directory structure, using directory names from hyperlink targets
     for linkLocal in linksLocal:
-        #print(linkLocal)
+        print(linkLocal)
         parentDirIn = Path(linkLocal).parent
         fileName = Path(linkLocal).name
         if parentDirIn is not None:
@@ -88,8 +88,8 @@ def main():
 
                 # Create output directory if it doesn't exist already
                 if not os.path.isdir(dirOut):
-                    #pass
-                    Path(dirOut).mkdir(parents=True, exist_ok=True)
+                    pass
+                    #Path(dirOut).mkdir(parents=True, exist_ok=True)
                 
                 # Lookup corresponding file in input directory tree
                 for fileIn in filesIn:
