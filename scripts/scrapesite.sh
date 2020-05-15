@@ -1,7 +1,7 @@
 #!/bin/bash
 
 wget -- mirror \
-    --recursive
+    --recursive \
     --page-requisites \
     --output-file="liesbets-atelier.log" \
     -e robots=off \
