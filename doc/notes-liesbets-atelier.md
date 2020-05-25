@@ -1,4 +1,4 @@
-# Notes Liesbets atelier
+# Notes Liesbet's atelier
 
 Live site still here:
 
@@ -35,3 +35,30 @@ diff -r ./wget-site/ziklies.home.xs4all.nl/ ./wget-toilet/ziklies.home.xs4all.nl
 ```
 
 Result: "toilet" capture contains everything that is also in the "regular" capture.
+
+## Fix links to toilet
+
+In file "start.html":
+
+```
+<B><A HREF="http://imagine.xs4all.nl/ziklies/"> 
+Ga naar de toilet</a></B>
+```
+
+Target point to external domain that doesn't exist anymore. Changed this to local file:
+
+```
+<B><A HREF="toilet.html"> 
+Ga naar de toilet</a></B>
+```
+
+Likewise for "e-start.html" (with target "e-toilet.html").
+
+
+## AV formats on toilet page
+
+- Page "toilet.html" links to 3 QuickTime movie files, but this format is not supported by modern web browsers.
+
+- It also links to a Sun Audio (<https://en.wikipedia.org/wiki/Au_file_format>) file.
+
+Likewise for "e-toilet.html".
