@@ -8,7 +8,7 @@ rootDir=/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl
 
 # Old and new root domain (used for updating redirects)
 rootOld=http://www.xs4all.nl/~ziklies/
-rootNew=""
+rootNew="/"
 
 while IFS= read -d $'\0' -r file ; do
     # Update references to root domain

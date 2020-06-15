@@ -228,6 +228,45 @@ Convert to:
 </map>
 ```
 
+## Replace links to website root
+
+For internal links site uses a mixture of relative URLs (which work fine) and absolute ones that use the website root `http://www.xs4all.nl/~ziklies/`, which is forwarded by X4ALL to `https://ziklies.home.xs4all.nl/`. This causes some issues, so I've rewritten these absolute internal URLs as relative links. Script:
+
+```
+#!/bin/bash
+
+# This script replaces all references to website root http://www.xs4all.nl/~ziklies/
+# by an empty string so references become relative
+
+# Location on file system
+rootDir=/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl
+
+# Old and new root domain (used for updating redirects)
+rootOld=http://www.xs4all.nl/~ziklies/
+rootNew=""
+
+while IFS= read -d $'\0' -r file ; do
+    # Update references to root domain
+    #echo $file    
+    sed -i "s|$rootOld|$rootNew|g" $file
+done < <(find $rootDir -type f -regex '.*\.\(html\|htm\)' -print0)
+```
+
+ACHTUNG this breaks some stuff!
+
+Files bad/kaart01.htm ... kaart08.htm:
+
+```
+-<A HREF="http://www.xs4all.nl/~ziklies/badkamer.html"  target=_parent> Ga terug naar de badkamer</a><br>
+-<A HREF="http://www.xs4all.nl/~ziklies/start.html"  target=_parent> Ga terug naar Liesbet's Atelier</a><br>
+-<A HREF="http://www.xs4all.nl/~ziklies/index.html"  target=_parent> Ga naar buiten</a>
++<A HREF="badkamer.html"  target=_parent> Ga terug naar de badkamer</a><br>
++<A HREF="start.html"  target=_parent> Ga terug naar Liesbet's Atelier</a><br>
++<A HREF="index.html"  target=_parent> Ga naar buiten</a>
+```
+
+
+
 ## AV formats on toilet page
 
 - Page "toilet.html" links to 3 QuickTime movie files, but this format is not supported by modern web browsers.
