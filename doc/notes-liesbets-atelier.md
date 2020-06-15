@@ -62,7 +62,7 @@ Original site: server-side [image maps](https://en.wikipedia.org/wiki/Image_map)
 <A HREF="/cgi-bin/imagemap/~ziklies/deurtje1.map"><img src="deurtje1.gif" Border=0 ISMAP></A>
 ```
 
-Contents of `deurtje1.map` file:
+Contents of `DEURTJE1.MAP` file (from ZIP file provided by site creator):
 
 ```
 default http://www.xs4all.nl/~ziklies/start.html
@@ -92,7 +92,7 @@ Same as above:
 <img src="hal.gif" Align="right" Border=0 ISMAP></A>
 ```
 
-Server-side image map:
+Server-side image map `HAL.MAP`(from ZIP file provided by site creator):
 
 ```
 default http://www.xs4all.nl/~ziklies/woonk/woon01.html
@@ -132,7 +132,8 @@ Same as above:
 <A HREF="/cgi-bin/imagemap/~ziklies/e-hal.map">
 <img src="e-hal.gif" Align="right" Border=0 ISMAP></A>
 ```
-Server-side image map:
+
+Server-side image map `E-HAL.MAP`(from ZIP file provided by site creator):
 
 ```
 default http://www.xs4all.nl/~ziklies/woonk/e-woon01.html
@@ -156,6 +157,74 @@ Convert to:
     <area shape="poly" coords="167,54 213,1 260,0 255,38 189,82 167,55" href="http://www.xs4all.nl/~ziklies/e-trap.html">
     <area shape="rect" coords="2,55 65,140" href="http://www.xs4all.nl/~ziklies/woonk/e-woon01.html">
     <area shape="default" href="http://www.xs4all.nl/~ziklies/woonk/e-woon01.html">
+</map>
+```
+
+## Image map overloop.html
+
+Same as above:
+
+```
+<A HREF="/cgi-bin/imagemap/~ziklies/overloop.map">
+<img src="overloop.gif" Align="right" Border=0 ISMAP></A>
+```
+
+Server-side image map `OVERLOOP.MAP`(from ZIP file provided by site creator):
+
+```
+default http://www.xs4all.nl/~ziklies/badkamer.html
+rect http://www.xs4all.nl/~ziklies/atelier/atelier1.html 1,1 64,98 
+rect http://www.xs4all.nl/~ziklies/doka.html 0,102 66,203 
+rect http://www.xs4all.nl/~ziklies/slaapk/slaap00.html 195,1 278,102 
+rect http://www.xs4all.nl/~ziklies/zolder/zolder1.html 195,104 258,202 
+rect http://www.xs4all.nl/~ziklies/trapaf.html 112,176 187,237 
+```
+
+Convert to:
+
+```
+<img src="overloop.gif" usemap="#overloopMap" align="right" alt="overloop" border="0">
+<map name="overloopMap">
+    <area shape="rect" coords="1,1 64,98" href="http://www.xs4all.nl/~ziklies/atelier/atelier1.html">
+    <area shape="rect" coords="0,102 66,203" href="http://www.xs4all.nl/~ziklies/doka.html">
+    <area shape="rect" coords="195,1 278,102" href="http://www.xs4all.nl/~ziklies/slaapk/slaap00.html">
+    <area shape="rect" coords="195,104 258,202" href="http://www.xs4all.nl/~ziklies/zolder/zolder1.html">
+    <area shape="rect" coords="112,176 187,237" href="http://www.xs4all.nl/~ziklies/trapaf.html">
+    <area shape="default" href="http://www.xs4all.nl/~ziklies/badkamer.html">
+</map>
+```
+
+## Image map e-overloop.html
+
+Same as above:
+
+```
+<A HREF="/cgi-bin/imagemap/~ziklies/e-overl.map">
+<img src="e-overl.gif" Align="right" Border=0 ISMAP></A>
+```
+
+Server-side image map `E-OVERL.MAP`(from ZIP file provided by site creator):
+
+```
+default http://www.xs4all.nl/~ziklies/trapaf.html
+rect http://www.xs4all.nl/~ziklies/atelier/e-atelr1.html 1,0 63,99 
+rect http://www.xs4all.nl/~ziklies/doka.html 0,104 64,204 
+rect http://www.xs4all.nl/~ziklies/slaapk/e-slaap0.html 195,1 278,101 
+rect http://www.xs4all.nl/~ziklies/zolder/zolder1.html 195,103 258,210 
+rect http://www.xs4all.nl/~ziklies/e-trapaf.html 116,176 188,237 
+```
+
+Convert to:
+
+```
+<img src="e-overl.gif" usemap="#eOverloopMap" align="right" alt="e-overloop" border="0">
+<map name="eOverloopMap">
+    <area shape="rect" coords="1,0 63,99" href="http://www.xs4all.nl/~ziklies/atelier/e-atelr1.html">
+    <area shape="rect" coords="0,104 64,204" href="http://www.xs4all.nl/~ziklies/doka.html">
+    <area shape="rect" coords="195,1 278,101" href="http://www.xs4all.nl/~ziklies/slaapk/e-slaap0.html">
+    <area shape="rect" coords="195,103 258,210" href="http://www.xs4all.nl/~ziklies/zolder/zolder1.html">
+    <area shape="rect" coords="116,176 188,237" href="http://www.xs4all.nl/~ziklies/e-trapaf.html">
+    <area shape="default" href="http://www.xs4all.nl/~ziklies/trapaf.html">
 </map>
 ```
 
