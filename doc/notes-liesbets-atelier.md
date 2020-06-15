@@ -234,6 +234,20 @@ For internal links site uses a mixture of relative URLs (which work fine) and ab
 
 <https://github.com/KBNLresearch/xs4all-resources/blob/master/scripts/rewriteurls.sh>
 
+BUT note that this affects the appearance of the statistics page:
+
+<http://127.0.0.1:8000/statistics.html>
+
+Fixed this by undoing commit for this one single file using:
+
+```
+git checkout HEAD^ -- ziklies.home.xs4all.nl/statistics.html
+```
+
+## TODO
+
+- Scripting!
+
 ## AV formats on toilet page
 
 - Page "toilet.html" links to 3 QuickTime movie files, but this format is not supported by modern web browsers.
