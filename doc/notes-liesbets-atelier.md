@@ -10,7 +10,7 @@ Wget version: GNU Wget 1.19.4 built on linux-gnu.
 
 Script:
 
-<../scripts/scrapesite.sh>
+[scrapesite.sh](../scripts/scrapesite.sh)
 
 - Toilet missing, bc wrong link! But is on live site:
 
