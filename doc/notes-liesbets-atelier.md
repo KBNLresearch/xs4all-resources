@@ -19,7 +19,7 @@ Script:
 
 So scraped again using those pages as seeds:
 
-<../scripts/scrape-toilet.sh>
+[scrape-toilet.sh]()../scripts/scrape-toilet.sh)
 
 Here "$1" is a reference to a text file with 2 seeds URLs of the  'toilet' pages that are missing from the original capture:  
 
