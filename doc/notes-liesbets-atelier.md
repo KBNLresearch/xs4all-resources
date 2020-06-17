@@ -244,9 +244,187 @@ Fixed this by undoing commit for this one single file using:
 git checkout HEAD^ -- ziklies.home.xs4all.nl/statistics.html
 ```
 
-## TODO
+## Mail form, toilet page
 
-- Scripting!
+Page:
+
+<https://ziklies.home.xs4all.nl/toilet.html>
+
+Form:
+
+```
+<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
+<INPUT TYPE="hidden" name="to" value="ziklies">
+<INPUT TYPE="hidden" name="nextpage" value="/toilet.html">
+<INPUT TYPE="hidden"  NAME="signature" VALUE="toilet@message" >
+<INPUT TYPE="text"  NAME="toiletmessage" VALUE="kras hier"SIZE=60>
+
+<!TEXTAREA NAME="message_body" Rows=1 Cols=60 ></TEXTAREA><br>
+<p>
+
+<INPUT TYPE="submit" VALUE="verstuur tekst"> . . . . 
+<INPUT TYPE="reset" VALUE="wis boodschap"><br>
+of een emailtje te sturen met gif-plaatje.
+</FORM><br>
+```
+
+The `ACTION` attribute of the form defines form handler (page with script that handles the submitted form data) `http://www.xs4all.nl/cgi-bin/mail-a-form`. It is documented here:
+
+<https://www.xs4all.nl/service/installeren/hosting/mail-a-form-toevoegen/>
+
+
+Moreover the ZIP file contains an old Python script that appears to read a message submitted through the form, and then adds it to the image:
+
+```
+~/kb/liesbets-atelier/liesbets-atelier-zip/Homepage-html/HOMEPAGE/TOILET/WCMUUR.PY`
+```
+
+BUT this is an old Python version (1.4), and not clear how I/O works exactly (besides the submit form doesn't do)
+
+Also, as per site's author (email to Kees, October 2019):
+
+> Het scriptje voor de toiletdeur is er misschien niet meer.
+> Was door een Delftse student gemaakt en misschien direct in de juiste map
+> gezet.
+> Zou het niet meer precies weten.
+> In eerste instantie maakte ik zelf met de hand een update van de
+> toiletdeur. Pas later kwam er dat scriptje.
+
+**Action:** leave as-is.
+
+## Find more forms
+
+```
+grep -r "<FORM" ~/kb/liesbets-atelier/liesbets-atelier/ > grep.txt
+```
+
+Result:
+
+```
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<FORM METHOD="POST"
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<FORM METHOD="POST"
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/e-toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
+```
+
+## Slaapkamer form
+
+```
+<FORM METHOD="POST"
+ACTION="/cgi-bin/barbie.cgi">
+
+<DL>
+<DD><b>Als eerste: welke broek of rok moet ze aandoen? </b><br>
+<INPUT TYPE="radio" NAME="onder" VALUE="1a" > A1
+<INPUT TYPE="radio" NAME="onder" VALUE="2a" > A2
+<INPUT TYPE="radio" NAME="onder" VALUE="3a" > A3
+<INPUT TYPE="radio" NAME="onder" VALUE="4a" > A4
+<INPUT TYPE="radio" NAME="onder" VALUE="5a" > A5
+<INPUT TYPE="radio" NAME="onder" VALUE="6a" > A6
+<INPUT TYPE="radio" NAME="onder" VALUE="7a" > A7<br>
+</DL>
+<br>
+<DL>
+<DD><b>En dan: welk topje, trui, blouze of jasje past daarbij? </b><br>
+<INPUT TYPE="radio" NAME="midden" VALUE="1b" > B1
+<INPUT TYPE="radio" NAME="midden" VALUE="2b" > B2
+<INPUT TYPE="radio" NAME="midden" VALUE="3b" > B3
+<INPUT TYPE="radio" NAME="midden" VALUE="4b" > B4
+<INPUT TYPE="radio" NAME="midden" VALUE="5b" > B5
+<INPUT TYPE="radio" NAME="midden" VALUE="6b" > B6
+<INPUT TYPE="radio" NAME="midden" VALUE="7b" > B7<br>
+</DL>
+<br>
+<DL>
+<DD><b>En als laatste: welke oorbellen en wat moet ze met haar haar? </b><br>
+<INPUT TYPE="radio" NAME="top" VALUE="1c" > C1
+<INPUT TYPE="radio" NAME="top" VALUE="2c" > C2
+<INPUT TYPE="radio" NAME="top" VALUE="3c" > C3
+<INPUT TYPE="radio" NAME="top" VALUE="4c" > C4
+<INPUT TYPE="radio" NAME="top" VALUE="5c" > C5
+<INPUT TYPE="radio" NAME="top" VALUE="6c" > C6
+<INPUT TYPE="radio" NAME="top" VALUE="7c" > C7<br>
+</DL><br>
+<center>
+<INPUT TYPE="submit" VALUE="kijk in de spiegel voor het resultaat">
+<br></center>
+</FORM>
+```
+
+Script `barbie.cgi` included in ZIP file. Steps:
+
+1. Create `cgi-bin` directory at website root
+2. Copy `barbie.cgi` over to this dir
+3. Make it executable using `chmod 755 barbie.cgi`
+4. Start server with `--cgi` flag, i.e. `python3 -m http.server --cgi`
+5. Inside script, replace `http://www.xs4all.nl/~ziklies/` with `/`.
+6. Copy the 21 1A.GIF ... 7C.GIF files to `slaapk`, and change name + extension to lowercase (see also <https://ziklies.home.xs4all.nl/slaapk/>). 
+
+BUT submitting the form then results in this:
+
+```
+FileNotFoundError: [Errno 2] No such file or directory: '/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/cgi-bin/barbie.cgi'
+```
+Not clear why this happens, as neither the form nor the script refer to the `ziklies.home.xs4all.nl` subdomain.
+
+From:
+
+<https://stackoverflow.com/questions/13490311/cgi-scripts-with-python/14739973>
+
+Problem is actually this line in barbie.cgi:
+
+```
+#!/usr/local/bin/perl
+```
+
+This doesn't exist, so changed to:
+
+```
+#!/usr/bin/perl
+```
+
+After this change the script executes without errors, but it doesn't seem to have any effect.
+
+
+## Find more scripting
+
+```
+grep -r "/cgi-bin" ~/kb/liesbets-atelier/liesbets-atelier/ > grep.txt
+```
+
+Result:
+
+```
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/index.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=at1tel">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/index.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=at1tel" 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=slptel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:ACTION="/cgi-bin/barbie1.cgi">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=slptel">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=slptel" 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap0.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=slptel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap0.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=slptel">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap0.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=slptel" 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap00.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=slptel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap00.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=slptel">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap00.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=slptel" 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=slptel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:ACTION="/cgi-bin/barbie.cgi">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=slptel">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=slptel" 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=attel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:<a href="http://www.xs4all.nl/cgi-bin/vote/vote.cgi?ziklies">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=attel">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=attel"
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/zeil01.htm:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=malta">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/zeil01.htm:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=malta" 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/kaart00.htm:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=gam">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/kaart00.htm:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=gam" 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/zeil00.htm:<!a href="http://www.nedstat.nl/cgi-bin/viewstat?name=gam">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/zeil00.htm:<!img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=gam" 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/new.html:<a href="http://www.xs4all.nl/cgi-bin/vote/vote.cgi?ziklies>
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/new.html:<a href="http://www.xs4all.nl/cgi-bin/vote/vote.cgi?ziklies>
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/e-toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
+```
 
 ## AV formats on toilet page
 
