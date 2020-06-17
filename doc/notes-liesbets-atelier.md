@@ -351,13 +351,13 @@ ACTION="/cgi-bin/barbie.cgi">
 </FORM>
 ```
 
-Script `barbie.cgi` included in ZIP file. Steps:
+Script `barbie.cgi` (and `barbie1.cgi` for English version) included in ZIP file. Steps:
 
 1. Create `cgi-bin` directory at website root
-2. Copy `barbie.cgi` over to this dir
+2. Copy `barbie.cgi` and `barbie.cgi` over to this dir
 3. Make it executable using `chmod 755 barbie.cgi`
 4. Start server with `--cgi` flag, i.e. `python3 -m http.server --cgi`
-5. Inside script, replace `http://www.xs4all.nl/~ziklies/` with `/`.
+5. Inside scripts, replace `http://www.xs4all.nl/~ziklies/` with `/`.
 6. Copy the 21 1A.GIF ... 7C.GIF files to `slaapk`, and change name + extension to lowercase (see also <https://ziklies.home.xs4all.nl/slaapk/>). 
 
 BUT submitting the form then results in this:
@@ -371,7 +371,7 @@ From:
 
 <https://stackoverflow.com/questions/13490311/cgi-scripts-with-python/14739973>
 
-Problem is actually this line in barbie.cgi:
+Problem is actually this line in `barbie.cgi` and `barbie1.cgi`:
 
 ```
 #!/usr/local/bin/perl
@@ -385,6 +385,56 @@ This doesn't exist, so changed to:
 
 After this change the script executes without errors, but it doesn't seem to have any effect.
 
+## Missing gspot directory + files
+
+This directory is missing from scraped site (and ZIP as well) because it is only referenced through JavaScript:
+
+<https://ziklies.home.xs4all.nl/slaapk/gspot/>
+
+Javascript reference (in `slaap01.html` + English version)
+
+```
+<A HREF="javascript:openit('gspot/index.html')">
+```
+
+File source:
+
+```
+<HTML>
+<HEAD>
+<TITLE>G_spot</TITLE>
+</HEAD>
+<BODY BGCOLOR="#000000" LINK="#E7E801" VLINK="#E7E801">
+<TABLE BORDER="0" CELLSPACING="0" WIDTH=100% HEIGHT=100%>
+<TR >
+<TD ALIGN=CENTER VALIGN=MIDDLE>
+<FONT FACE="arial,helvetica" SIZE=3 COLOR="#E7E801">
+<embed SRC="gspot.dcr" BGCOLOR=#000000 WIDTH=512 HEIGHT=320>       
+</font>
+</td>
+</tr>
+</table>
+</body>
+</html>
+```
+
+
+Note referenced file `gspot.dcr`. These files are also missing from the ZIP file. 
+
+
+Fix:
+
+1. Manually create `gspot` directory
+2. Add files using `wget`:
+   - `wget https://ziklies.home.xs4all.nl/slaapk/gspot/index.html`
+   - `wget https://ziklies.home.xs4all.nl/slaapk/gspot/gspot.dcr`
+
+But what is a .dcr file?
+
+- Caja file manager: Kodak DCR Raw image
+- File: RIFF (big-endian) data
+- Siegfried: 'Macromedia (Adobe) Director Compressed Resource file' ('extension match dcr; byte match at 0, 12 (signature 1/2)')
+- Apache Tika: application/x-director
 
 ## Find more scripting
 
@@ -425,6 +475,10 @@ Result:
 /home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/new.html:<a href="http://www.xs4all.nl/cgi-bin/vote/vote.cgi?ziklies>
 /home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/e-toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
 ```
+
+## TODO
+
+- 
 
 ## AV formats on toilet page
 
