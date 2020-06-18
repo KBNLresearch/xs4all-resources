@@ -549,7 +549,50 @@ Restart server:
 sudo systemctl restart apache2
 ```
 
-## Scape local site to warc
+## Enable cdgi scripts
+
+From [Apache docs](https://httpd.apache.org/docs/2.4/howto/cgi.html).
+
+Edit main config file:
+
+```
+sudo xed /etc/apache2/apache2.conf
+```
+
+Add lines to end:
+
+```
+# Include httpd.conf 
+Include httpd.conf
+```
+Then create file `httpd.conf`, and add following sections:
+
+```
+# Set directories that allow execution of cgi scripts
+#
+<Directory "/var/www/ziklies.home.xs4all.nl/cgi-bin">
+    Options +ExecCGI
+</Directory>
+
+# Tell server which files are scripts
+AddHandler cgi-script .cgi .pl
+```
+missions 
+Then noticed scripts weren't executable bc of earlier permissions reset, so change this:
+
+```
+chmod 755 *.cgi
+```
+
+And reset server:
+
+```
+sudo systemctl restart apache2
+```
+
+BUT scripts still don't work after this.
+
+## Scrape local site to warc
 
 Used script [scrape-local-site.sh](../scripts/scrape-local-site.sh) (adapted from earlier NL-menu work).
 
