@@ -551,8 +551,47 @@ sudo systemctl restart apache2
 
 ## Scape local site to warc
 
+Used script [scrape-local-site.sh](../scripts/scrape-local-site.sh) (adapted from earlier NL-menu work).
 
 
+## Render warc
+
+Install pywb:
+
+```
+python3 -m install --user pywb
+```
+
+(BTW installation process reports `Segmentation fault (core dumped)` at end of install!)
+
+Create web archives directory and then enter it:
+
+```
+mkdir web-archives
+cd web-archives
+```
+
+Create new archive:
+
+```
+wb-manager init ziklies
+```
+
+Add warc file to archive:
+
+```
+wb-manager add ziklies /home/johan/kb/liesbets-atelier/warc/ziklies.home.xs4all.nl.warc
+```
+
+Start pywb:
+
+```
+wayback
+```
+
+Archived website now accessible from browser at below link:
+
+<http://localhost:8080/ziklies/20200618150835/http://ziklies.home.xs4all.nl/>
 - 
 
 ## AV formats on toilet page
