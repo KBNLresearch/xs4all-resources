@@ -436,6 +436,20 @@ But what is a .dcr file?
 - Siegfried: 'Macromedia (Adobe) Director Compressed Resource file' ('extension match dcr; byte match at 0, 12 (signature 1/2)')
 - Apache Tika: application/x-director
 
+More info here:
+
+<http://fileformats.archiveteam.org/wiki/Shockwave_(Director)>
+
+<https://en.wikipedia.org/wiki/Adobe_Shockwave>
+
+<https://medium.com/@nosamu/a-tour-of-the-adobe-director-file-format-e375d1e063c0>
+
+How to play these files:
+
+<https://gaming.stackexchange.com/questions/339173/how-can-i-play-dcr-shockwave-games>
+
+Internet Explorer 11: won't install in Wine!
+
 ## Find more scripting
 
 ```
@@ -476,7 +490,68 @@ Result:
 /home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/e-toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
 ```
 
-## TODO
+- Most are refs to scripts at nedstat.nl (offline; actually slows things down a bit)
+- On start.html, new.html: link to voting script http://www.xs4all.nl/cgi-bin/vote/vote.cgi
+- 
+## Serve with Apache
+
+See:
+
+<https://github.com/KBNLresearch/nl-menu-resources/blob/master/doc/serving-static-website-with-Apache.md>
+
+Create directory `ziklies.home.xs4all.nl` in `/var/www`. Then from that directory:
+
+```
+sudo rsync -avhl /home/johan//kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/ ./
+```
+
+Then fix permissions:
+
+```
+sudo find . -type d -exec chmod 755 {} \;
+sudo find . -type f -exec chmod 644 {} \;
+```
+
+Create config file:
+
+```
+sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/ziklies.conf
+```
+
+Then edit (as sudo), and adjust DocumentRoot:
+
+```
+DocumentRoot /var/www/ziklies.home.xs4all.nl
+```
+
+And also set server name (needed to make redirects work):
+
+```
+ServerName ziklies.home.xs4all.nl
+```
+
+Activate new config:
+
+```
+sudo a2dissite 000-default.conf
+sudo a2ensite ziklies.conf
+```
+
+Add line to hosts file:
+
+```
+127.0.0.1	ziklies.home.xs4all.nl
+```
+
+Restart server:
+
+```
+sudo systemctl restart apache2
+```
+
+## Scape local site to warc
+
+
 
 - 
 
