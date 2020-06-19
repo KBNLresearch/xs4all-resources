@@ -492,7 +492,13 @@ Result:
 
 - Most are refs to scripts at nedstat.nl (offline; actually slows things down a bit)
 - On start.html, new.html: link to voting script http://www.xs4all.nl/cgi-bin/vote/vote.cgi
-- 
+
+## Keep track of changes
+
+Site data in Git repo, commit for each modification:
+
+![](./images/liesbet-gitk.png)
+
 ## Serve with Apache
 
 See:
