@@ -549,48 +549,109 @@ Restart server:
 sudo systemctl restart apache2
 ```
 
-## Enable cdgi scripts
+## Enable cgi scripts
 
-From [Apache docs](https://httpd.apache.org/docs/2.4/howto/cgi.html).
+Info from [Apache docs](https://httpd.apache.org/docs/2.4/howto/cgi.html) doesn't  seem to work, so followed [this tutorial](https://code-maven.com/set-up-cgi-with-apache) instead.
 
-Edit main config file:
-
-```
-sudo xed /etc/apache2/apache2.conf
-```
-
-Add lines to end:
+First copy default cgi config file to custom one:
 
 ```
-# Include httpd.conf 
-Include httpd.conf
+sudo cp /etc/apache2/conf-available/serve-cgi-bin.conf /etc/apache2/conf-available/serve-cgi-bin-custom.conf
 ```
-Then create file `httpd.conf`, and add following sections:
+
+Then edit:
 
 ```
-# Set directories that allow execution of cgi scripts
-#
+sudo xed /etc/apache2/conf-available/serve-cgi-bin-custom.conf
+```
+Change "Directory" to:
+
+```
 <Directory "/var/www/ziklies.home.xs4all.nl/cgi-bin">
-    Options +ExecCGI
-</Directory>
-
-# Tell server which files are scripts
-AddHandler cgi-script .cgi .pl
-```
-missions 
-Then noticed scripts weren't executable bc of earlier permissions reset, so change this:
-
-```
-chmod 755 *.cgi
 ```
 
-And reset server:
+Disable default config:
 
 ```
-sudo systemctl restart apache2
+sudo a2disconf serve-cgi-bin.conf
 ```
 
-BUT scripts still don't work after this.
+Enable custom one:
+
+```
+sudo a2enconf serve-cgi-bin-custom.conf
+```
+
+Enable cgi:
+
+```
+sudo a2enmod cgi.load
+```
+
+Restart server:
+
+```
+sudo systemctl reload apache2
+```
+
+Calling script results in "403 Forbidden". Check error log:
+
+```
+xed /var/log/apache2/error.log
+```
+
+Which contains:
+
+```
+[Fri Jun 19 14:40:27.083544 2020] [authz_core:error] [pid 9144:tid 140374009665280] [client 127.0.0.1:39262] AH01630: client denied by server configuration: /usr/lib/cgi-bin/barbie.cgi, referer: http://ziklies.home.xs4all.nl/slaapk/slaap01.html
+```
+
+So it seems server looks for script at wrong location. Changed in "serve-cgi-bin-custom.conf":
+
+```
+ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+```
+
+Into:
+
+```
+ScriptAlias /cgi-bin/ /var/www/ziklies.home.xs4all.nl/cgi-bin/
+```
+
+Then:
+
+```
+sudo a2disconf serve-cgi-bin-custom.conf
+sudo a2enconf serve-cgi-bin-custom.conf
+sudo systemctl reload apache2
+```
+
+After these changes it works!
+
+## More generic method
+
+The ScriptAlias method assumes all scripts are in same dir, which is unpractical if we use the server setup for multiple sites later on. Below configuration (adapted from "User Directories" example [here](https://httpd.apache.org/docs/2.4/howto/cgi.html)) will work for cgi scripts located in any `cgi-bin` folder under `/var/www`:
+
+```
+<IfModule mod_alias.c>
+	<IfModule mod_cgi.c>
+		Define ENABLE_USR_LIB_CGI_BIN
+	</IfModule>
+
+	<IfModule mod_cgid.c>
+		Define ENABLE_USR_LIB_CGI_BIN
+	</IfModule>
+
+	<IfDefine ENABLE_USR_LIB_CGI_BIN>
+		<Directory "/var/www/*/cgi-bin">
+			Options +ExecCGI
+			AddHandler cgi-script .cgi
+		</Directory>
+	</IfDefine>
+</IfModule>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+```
 
 ## Scrape local site to warc
 
