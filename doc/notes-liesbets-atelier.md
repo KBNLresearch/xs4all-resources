@@ -705,3 +705,13 @@ Archived website now accessible from browser at below link:
 - It also links to a Sun Audio (<https://en.wikipedia.org/wiki/Au_file_format>) file.
 
 Likewise for "e-toilet.html".
+
+## Misc
+
+Bio of creator Liesbet Zikkenheimer:
+
+<http://zicnet.nl/>
+
+Interview:
+
+<https://www.netkwesties.nl/documenten/Interview%20Liesbet%20Zikkenheimer.pdf>
