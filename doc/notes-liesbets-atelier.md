@@ -228,6 +228,11 @@ Convert to:
 </map>
 ```
 
+## Image map demo
+
+<iframe src="https://player.vimeo.com/video/431453515" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+<p><a href="https://vimeo.com/431453515">Image Map</a> from <a href="https://vimeo.com/user75374310">bitsgalore</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+
 ## Replace links to website root
 
 For internal links site uses a mixture of relative URLs (which work fine) and absolute ones that use the website root `http://www.xs4all.nl/~ziklies/`, which is forwarded by X4ALL to `https://ziklies.home.xs4all.nl/`. This causes some issues, so I've rewritten these absolute internal URLs as relative links. Script:
@@ -493,6 +498,19 @@ Result:
 - Most are refs to scripts at nedstat.nl (offline; actually slows things down a bit)
 - On start.html, new.html: link to voting script http://www.xs4all.nl/cgi-bin/vote/vote.cgi
 
+## Redaction of guestbook
+
+Following page contains name, email addresses of vistors:
+
+<http://ziklies.home.xs4all.nl/gasten.html>
+
+So redacted them out for publict version. Redacted version in branch "public-redacted" of Git repo.
+
+Attention, some more names here:
+
+<http://ziklies.home.xs4all.nl/slaapk/lijst.html>
+
+
 ## Keep track of changes
 
 Site data in Git repo, commit for each modification:
@@ -658,6 +676,12 @@ The ScriptAlias method assumes all scripts are in same dir, which is unpractical
 
 # vim: syntax=apache ts=4 sw=4 sts=4 sr noet
 ```
+
+## Mirror demo
+
+<iframe src="https://player.vimeo.com/video/431448257" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+<p><a href="https://vimeo.com/431448257">Mirror</a> from <a href="https://vimeo.com/user75374310">bitsgalore</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+
 
 ## Scrape local site to warc
 
