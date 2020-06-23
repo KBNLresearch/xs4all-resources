@@ -22,7 +22,6 @@ def main():
     # First add domain root
     urls.append("http://" + siteName)
 
-
     # Add remaining files (and rewrite file paths as URLs)
     #find "/var/www/"$site -type f | sed -e 's/\/var\/www\//http:\/\//g' >> urls.txt
 
