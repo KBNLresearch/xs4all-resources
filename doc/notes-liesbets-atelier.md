@@ -686,7 +686,9 @@ The ScriptAlias method assumes all scripts are in same dir, which is unpractical
 
 ## Scrape local site to warc
 
-Used script [scrape-local-site.sh](../scripts/scrape-local-site.sh) (adapted from earlier NL-menu work).
+<strike>Used script [scrape-local-site.sh](../scripts/scrape-local-site.sh) (adapted from earlier NL-menu work).</strike>
+
+Used script [scrape-ziklies-local.py](../scripts/scripts/scrape-ziklies-local.py), which is based on warcio and also captures all possible results of the "barbie" scripts.
 
 
 ## Render warc
@@ -715,7 +717,7 @@ wb-manager init ziklies
 Add warc file to archive:
 
 ```
-wb-manager add ziklies /home/johan/kb/liesbets-atelier/warc/ziklies.home.xs4all.nl.warc
+wb-manager add ziklies /home/johan/kb/liesbets-atelier/warc/ziklies.home.xs4all.nl.warc.gz
 ```
 
 Start pywb:
@@ -728,13 +730,6 @@ Archived website now accessible from browser at below link:
 
 <http://localhost:8080/ziklies/20200618150835/http://ziklies.home.xs4all.nl/>
 - 
-
-## Capture cgi script
-
-[Webrecorder Desktop App](https://github.com/webrecorder/webrecorder-desktop) can do this, but every combination of input fields needs to be entered manually!
-
-Resulting WARC can be played back with pywb.
-
 
 ## AV formats on toilet page
 
