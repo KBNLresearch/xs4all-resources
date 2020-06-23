@@ -124,6 +124,7 @@ So convert to:
     <area shape="default" href="http://www.xs4all.nl/~ziklies/woonk/woon01.html">
 </map>
 ```
+
 ## Image map e-start.html
 
 Same as above:
@@ -363,7 +364,7 @@ Script `barbie.cgi` (and `barbie1.cgi` for English version) included in ZIP file
 3. Make it executable using `chmod 755 barbie.cgi`
 4. Start server with `--cgi` flag, i.e. `python3 -m http.server --cgi`
 5. Inside scripts, replace `http://www.xs4all.nl/~ziklies/` with `/`.
-6. Copy the 21 1A.GIF ... 7C.GIF files to `slaapk`, and change name + extension to lowercase (see also <https://ziklies.home.xs4all.nl/slaapk/>). 
+6. Copy the 21 1A.GIF ... 7C.GIF files to `slaapk`, and change name + extension to lowercase (see also <https://ziklies.home.xs4all.nl/slaapk/>).
 
 BUT submitting the form then results in this:
 
@@ -727,6 +728,13 @@ Archived website now accessible from browser at below link:
 
 <http://localhost:8080/ziklies/20200618150835/http://ziklies.home.xs4all.nl/>
 - 
+
+## Capture cgi script
+
+[Webrecorder Desktop App](https://github.com/webrecorder/webrecorder-desktop) can do this, but every combination of input fields needs to be entered manually!
+
+Resulting WARC can be played back with pywb.
+
 
 ## AV formats on toilet page
 
