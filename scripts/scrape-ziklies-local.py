@@ -23,8 +23,6 @@ def main():
     urls.append("http://" + siteName)
 
     # Add remaining files (and rewrite file paths as URLs)
-    #find "/var/www/"$site -type f | sed -e 's/\/var\/www\//http:\/\//g' >> urls.txt
-
     for root, dirs, files in os.walk(siteDir):
             for filename in files:
                 # Full path
@@ -34,17 +32,16 @@ def main():
                 url = file_path.replace("/var/www/", "http://")
                 urls.append(url)
     
-    # Iterate over URL list
-    for url in urls:
-        with capture_http(warcOut):
+    # Start capturing stuff
+    with capture_http(warcOut):
+        # Iterate over URL list
+        for url in urls:
             requests.get(url)
 
-    # Iterate over all input combinations of "barbie" scripts
-    # Note that we also account for cases where 1 or more
-    # fields are not set!
-    # ("barbie1.cgi" is the English-language version)
-
-    with capture_http(warcOut):
+        # Iterate over all input combinations of "barbie" scripts
+        # Note that we also account for cases where 1 or more
+        # fields are not set!
+        # ("barbie1.cgi" is the English-language version)
         for indexOnder in ["na", *range(1, 8)]:
             for indexMidden in ["na", *range(1, 8)]:
                 for indexTop in ["na", *range(1, 8)]:
