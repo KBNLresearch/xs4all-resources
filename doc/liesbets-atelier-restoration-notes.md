@@ -43,6 +43,20 @@ Site data in Git repo, commit for each modification:
 ![](./images/liesbet-gitk.png)
 
 
+## Lightweight web server for testing
+
+For testing most of the below modifications (apart from the scripting) I used Python's built-in [http.server](https://docs.python.org/3/library/http.server.html). You can start it by simply running the following command from the directory that contains the local site data (e.g. the `ziklies.home.xs4all.nl` directory in the Git repo):
+
+```
+python3 -m http.server
+```
+
+Subsequently the contents of the directory can be accessed from <http://127.0.0.1:8000/>. Unlike Apache there's no need to for any elaborate configuration, or copying stuff to special locations, which makes it really useful for fast and easy testing. Side note: I wasn't able to make cgi-scripts work from my custom directory, so by for that I used a full-blown [Apache](https://httpd.apache.org/) install instead (I also used Apache for the [WARC capture](./liesbets-atelier-warc-notes.md)).
+
+More info here:
+
+[How do you set up a local testing server?](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server)
+
 ## Fix links to toilet
 
 In file "start.html":
