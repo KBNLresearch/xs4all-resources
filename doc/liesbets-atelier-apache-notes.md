@@ -1,10 +1,91 @@
 # Liesbet's Atelier Apache setup notes
 
-These notes describe the steps I followed for serving a local copy of the Liesbet's Atelier site.
+These notes describe the steps I followed for serving a local copy of the Liesbet's Atelier site. Theyu cover the following subjects:
 
-The general procedure is described here (this also explains how to installation Apache):
+- how to set up the Apache web server
+- how to restrict access to localhost
+- how to install a site
+- how to enable and configure cgi scripts
 
-<https://github.com/KBNLresearch/nl-menu-resources/blob/master/doc/serving-static-website-with-Apache.md>
+These notes are based on Apache/2.4.18 on Linux Mint 19.3/Ubuntu 18.04. They only cover static HTML-based sites. Serving dynamic sites also requires an additional application server and a database (i.e. a full [*LAMP stack*](https://en.wikipedia.org/wiki/LAMP_(software_bundle))).
+
+**!!Important!!** use these notes at your own risk! I'm not an expert on neither web server nor Apache, and these are primarily for my own reference!
+
+## Installation of Apache web server
+
+First update the package index:
+
+```
+sudo apt-get update
+```
+
+Then install Apache:
+
+```
+sudo apt-get install apache2
+```
+
+Configuration directory is `/etc/apache2`. Note that the server starts running directly after installation.
+
+## Restrict access to localhost
+
+Running a web server can expose your machine to a number of security threats, so it's a good idea to restrict access to localhost only (this means that only the machine on which the server is running can access it). To do this, locate the file *ports.conf* in the *Apache* configuration directory (`/etc/apache2`), open it in a text editor (as sudo), and then change this line:
+
+```
+Listen 80
+```
+
+into this:
+
+```
+Listen 127.0.0.1:80
+```
+
+Save the *ports.conf* file, and restart the web server using:
+
+```
+sudo systemctl restart apache2
+```
+
+## Check if the server is running
+
+Type the following command:
+
+```
+sudo systemctl status apache2
+```
+
+Output should be something like this:
+
+```
+● apache2.service - LSB: Apache2 web server
+    Loaded: loaded (/etc/init.d/apache2; bad; vendor preset: enabled)
+    Drop-In: /lib/systemd/system/apache2.service.d
+            └─apache2-systemd.conf
+    Active: active (running) since Tue 2018-04-10 12:40:29 CEST; 3min 21s ago
+        Docs: man:systemd-sysv-generator(8)
+    Process: 7756 ExecStop=/etc/init.d/apache2 stop (code=exited, status=0/SUCCESS)
+    Process: 5731 ExecReload=/etc/init.d/apache2 reload (code=exited, status=0/SUCCESS)
+    Process: 7779 ExecStart=/etc/init.d/apache2 start (code=exited, status=0/SUCCESS)
+    CGroup: /system.slice/apache2.service
+            ├─7796 /usr/sbin/apache2 -k start
+            ├─7799 /usr/sbin/apache2 -k start
+            └─7800 /usr/sbin/apache2 -k start
+
+Apr 10 12:40:28 johan-HP-ProBook-640-G1 systemd[1]: Starting LSB: Apache2 web server...
+Apr 10 12:40:28 johan-HP-ProBook-640-G1 apache2[7779]:  * Starting Apache httpd web server apache2
+Apr 10 12:40:28 johan-HP-ProBook-640-G1 apache2[7779]: AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Apr 10 12:40:29 johan-HP-ProBook-640-G1 apache2[7779]:  *
+Apr 10 12:40:29 johan-HP-ProBook-640-G1 systemd[1]: Started LSB: Apache2 web server.
+```
+
+Finally open below URL in your web browser:
+
+<http://127.0.0.1/>
+
+If all goes well this should load the Apache default page:
+
+![](./imgages/apache-default.png)
 
 ## Copy the files
 
