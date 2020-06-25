@@ -1,4 +1,4 @@
-# Notes Liesbet's atelier
+# Restoration notes Liesbet's atelier
 
 Live site still here:
 
@@ -35,6 +35,13 @@ diff -r ./wget-site/ziklies.home.xs4all.nl/ ./wget-toilet/ziklies.home.xs4all.nl
 ```
 
 Result: "toilet" capture contains everything that is also in the "regular" capture.
+
+## Keep track of changes
+
+Site data in Git repo, commit for each modification:
+
+![](./images/liesbet-gitk.png)
+
 
 ## Fix links to toilet
 
@@ -229,11 +236,6 @@ Convert to:
 </map>
 ```
 
-## Image map demo
-
-<iframe src="https://player.vimeo.com/video/431453515" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-<p><a href="https://vimeo.com/431453515">Image Map</a> from <a href="https://vimeo.com/user75374310">bitsgalore</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
-
 ## Replace links to website root
 
 For internal links site uses a mixture of relative URLs (which work fine) and absolute ones that use the website root `http://www.xs4all.nl/~ziklies/`, which is forwarded by X4ALL to `https://ziklies.home.xs4all.nl/`. This causes some issues, so I've rewritten these absolute internal URLs as relative links. Script:
@@ -248,6 +250,21 @@ Fixed this by undoing commit for this one single file using:
 
 ```
 git checkout HEAD^ -- ziklies.home.xs4all.nl/statistics.html
+```
+
+## Find forms
+
+```
+grep -r "<FORM" ~/kb/liesbets-atelier/liesbets-atelier/ > grep.txt
+```
+
+Result:
+
+```
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<FORM METHOD="POST"
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<FORM METHOD="POST"
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/e-toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
 ```
 
 ## Mail form, toilet page
@@ -296,22 +313,7 @@ Also, as per site's author (email to Kees, October 2019):
 > In eerste instantie maakte ik zelf met de hand een update van de
 > toiletdeur. Pas later kwam er dat scriptje.
 
-**Action:** leave as-is.
-
-## Find more forms
-
-```
-grep -r "<FORM" ~/kb/liesbets-atelier/liesbets-atelier/ > grep.txt
-```
-
-Result:
-
-```
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<FORM METHOD="POST"
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<FORM METHOD="POST"
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/e-toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
-```
+**Action:** leave as-is for now.
 
 ## Slaapkamer form
 
@@ -371,25 +373,20 @@ BUT submitting the form then results in this:
 ```
 FileNotFoundError: [Errno 2] No such file or directory: '/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/cgi-bin/barbie.cgi'
 ```
-Not clear why this happens, as neither the form nor the script refer to the `ziklies.home.xs4all.nl` subdomain.
 
-From:
-
-<https://stackoverflow.com/questions/13490311/cgi-scripts-with-python/14739973>
-
-Problem is actually this line in `barbie.cgi` and `barbie1.cgi`:
+Unexpected, as neither the form nor the script refer to the `ziklies.home.xs4all.nl` subdomain. After some searching found [this](https://stackoverflow.com/questions/13490311/cgi-scripts-with-python/14739973), which suggests the [Shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) of `barbie.cgi` and `barbie1.cgi` is the problem:
 
 ```
 #!/usr/local/bin/perl
 ```
 
-This doesn't exist, so changed to:
+This path doesn't exist on my machine, so changed to:
 
 ```
 #!/usr/bin/perl
 ```
 
-After this change the script executes without errors, but it doesn't seem to have any effect.
+After this change the script executes without errors when served with Apache. See also the [Apache setup notes](./liesbets-atelier-apache.md) on how to configure Apache properly.
 
 ## Missing gspot directory + files
 
@@ -415,7 +412,7 @@ File source:
 <TR >
 <TD ALIGN=CENTER VALIGN=MIDDLE>
 <FONT FACE="arial,helvetica" SIZE=3 COLOR="#E7E801">
-<embed SRC="gspot.dcr" BGCOLOR=#000000 WIDTH=512 HEIGHT=320>       
+<embed SRC="gspot.dcr" BGCOLOR=#000000 WIDTH=512 HEIGHT=320> 
 </font>
 </td>
 </tr>
@@ -424,9 +421,7 @@ File source:
 </html>
 ```
 
-
 Note referenced file `gspot.dcr`. These files are also missing from the ZIP file. 
-
 
 Fix:
 
@@ -442,7 +437,7 @@ But what is a .dcr file?
 - Siegfried: 'Macromedia (Adobe) Director Compressed Resource file' ('extension match dcr; byte match at 0, 12 (signature 1/2)')
 - Apache Tika: application/x-director
 
-More info here:
+So actually a Shockwave file. More info here:
 
 <http://fileformats.archiveteam.org/wiki/Shockwave_(Director)>
 
@@ -454,50 +449,20 @@ How to play these files:
 
 <https://gaming.stackexchange.com/questions/339173/how-can-i-play-dcr-shockwave-games>
 
-Internet Explorer 11: won't install in Wine!
+Internet Explorer 11: won't install in Wine! Leave this for now.
 
-## Find more scripting
-
-```
-grep -r "/cgi-bin" ~/kb/liesbets-atelier/liesbets-atelier/ > grep.txt
-```
-
-Result:
+## Inspect site for more scripting
 
 ```
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/index.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=at1tel">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/index.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=at1tel" 
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=slptel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:ACTION="/cgi-bin/barbie1.cgi">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=slptel">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=slptel" 
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap0.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=slptel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap0.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=slptel">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap0.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=slptel" 
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap00.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=slptel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap00.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=slptel">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap00.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=slptel" 
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=slptel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:ACTION="/cgi-bin/barbie.cgi">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=slptel">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=slptel" 
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:document.write("<img src=\"http://www.nedstat.nl/cgi-bin/referstat.gif?name=attel&refer="+escape(document.referrer)+"\" width=1 height=1 alt=\"\">");
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:<a href="http://www.xs4all.nl/cgi-bin/vote/vote.cgi?ziklies">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=attel">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=attel"
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/zeil01.htm:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=malta">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/zeil01.htm:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=malta" 
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/kaart00.htm:<a href="http://www.nedstat.nl/cgi-bin/viewstat?name=gam">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/kaart00.htm:<img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=gam" 
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/zeil00.htm:<!a href="http://www.nedstat.nl/cgi-bin/viewstat?name=gam">
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/bad/zeil00.htm:<!img src="http://www.nedstat.nl/cgi-bin/nedstat.gif?name=gam" 
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/new.html:<a href="http://www.xs4all.nl/cgi-bin/vote/vote.cgi?ziklies>
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/new.html:<a href="http://www.xs4all.nl/cgi-bin/vote/vote.cgi?ziklies>
-/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/e-toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
+grep -r "/cgi-bin" ~/kb/liesbets-atelier/liesbets-atelier/ > scripts-liesbet.txt
 ```
+
+Result [here](./scripts-liesbet.txt)
 
 - Most are refs to scripts at nedstat.nl (offline; actually slows things down a bit)
 - On start.html, new.html: link to voting script http://www.xs4all.nl/cgi-bin/vote/vote.cgi
+
+Nothing that is specific to Liesbet's Atelier, so we can leave this as-is.
 
 ## Redaction of guestbook
 
@@ -505,67 +470,11 @@ Following page contains name, email addresses of vistors:
 
 <http://ziklies.home.xs4all.nl/gasten.html>
 
-So redacted them out for publict version. Redacted version in branch "public-redacted" of Git repo.
+So redacted them out for public version (assuming there'll even be a public version at all, which is unsure at this point). Redacted version in branch "public-redacted" of Git repo.
 
 Attention, some more names here:
 
 <http://ziklies.home.xs4all.nl/slaapk/lijst.html>
-
-
-## Keep track of changes
-
-Site data in Git repo, commit for each modification:
-
-![](./images/liesbet-gitk.png)
-
-
-
-## Scrape local site to warc
-
-<strike>Used script [scrape-local-site.sh](../scripts/scrape-local-site.sh) (adapted from earlier NL-menu work).</strike>
-
-Used script [scrape-ziklies-local.py](../scripts/scripts/scrape-ziklies-local.py), which is based on warcio and also captures all possible results of the "barbie" scripts.
-
-
-## Render warc
-
-Install pywb:
-
-```
-python3 -m install --user pywb
-```
-
-(BTW installation process reports `Segmentation fault (core dumped)` at end of install!)
-
-Create web archives directory and then enter it:
-
-```
-mkdir web-archives
-cd web-archives
-```
-
-Create new archive:
-
-```
-wb-manager init ziklies
-```
-
-Add warc file to archive:
-
-```
-wb-manager add ziklies /home/johan/kb/liesbets-atelier/warc/ziklies.home.xs4all.nl.warc.gz
-```
-
-Start pywb:
-
-```
-wayback
-```
-
-Archived website now accessible from browser at below link:
-
-<http://localhost:8080/ziklies/20200618150835/http://ziklies.home.xs4all.nl/>
-- 
 
 ## AV formats on toilet page
 

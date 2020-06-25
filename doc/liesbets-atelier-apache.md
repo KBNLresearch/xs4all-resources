@@ -1,4 +1,4 @@
-# Setup notes Liesbet's Atelier with Apache
+# Liesbet's Atelier Apache setup notes
 
 These notes describe the steps I followed for serving a local copy of the Liesbet's Atelier site.
 
