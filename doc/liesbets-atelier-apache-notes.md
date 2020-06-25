@@ -1,6 +1,6 @@
 # Liesbet's Atelier Apache setup notes
 
-These notes describe the steps I followed for serving a local copy of the Liesbet's Atelier site. Theyu cover the following subjects:
+These notes describe the steps I followed for serving a local copy of the Liesbet's Atelier site. They cover the following subjects:
 
 - how to set up the Apache web server
 - how to restrict access to localhost
