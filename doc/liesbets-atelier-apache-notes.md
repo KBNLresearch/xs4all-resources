@@ -85,7 +85,7 @@ Finally open below URL in your web browser:
 
 If all goes well this should load the Apache default page:
 
-![](./imgages/apache-default.png)
+![](./images/apache-default.png)
 
 ## Copy the files
 
