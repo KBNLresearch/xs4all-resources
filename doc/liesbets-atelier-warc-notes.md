@@ -4,7 +4,7 @@ These describe the capture process of the restored Liesbet's Atelier site to WAR
 
 ## Capture local site to compressed warc
 
-Started out with [this script](../scripts/scrape-local-site.sh) (adapted from earlier NL-menu work) which use wget. However, this doesn't capture the interactive bedroom mirror (i.e. the "barbie" scripts). Following a suggestion by Ilya Kreymer I switched to [warcio](https://github.com/webrecorder/warcio), and wrote the script [scrape-ziklies-local.py](../scripts/scripts/scrape-ziklies-local.py), which captures all possible results of this script.
+Started out with [this script](../scripts/scrape-local-site.sh) (adapted from earlier NL-menu work) which use wget. However, this doesn't capture the interactive bedroom mirror (i.e. the "barbie" scripts). Following a suggestion by Ilya Kreymer I switched to [warcio](https://github.com/webrecorder/warcio), and wrote the script [scrape-ziklies-local.py](./scripts/scripts/scrape-ziklies-local.py), which captures all possible results of this script.
 
 ## Render warc
 
