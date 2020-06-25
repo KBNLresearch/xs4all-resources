@@ -45,14 +45,14 @@ In file "start.html":
 Ga naar de toilet</a></B>
 ```
 
-Target point to external domain that doesn't exist anymore. Changed this to local file:
+URL points to external domain that doesn't exist anymore. Changed this to local file:
 
 ```
 <B><A HREF="toilet.html"> 
 Ga naar de toilet</a></B>
 ```
 
-Likewise for "e-start.html" (with target "e-toilet.html").
+Likewise for "e-start.html" (with URL "e-toilet.html").
 
 ## Image map index page
 
@@ -518,170 +518,6 @@ Site data in Git repo, commit for each modification:
 
 ![](./images/liesbet-gitk.png)
 
-## Serve with Apache
-
-See:
-
-<https://github.com/KBNLresearch/nl-menu-resources/blob/master/doc/serving-static-website-with-Apache.md>
-
-Create directory `ziklies.home.xs4all.nl` in `/var/www`. Then from that directory:
-
-```
-sudo rsync -avhl /home/johan//kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/ ./
-```
-
-Then fix permissions:
-
-```
-sudo find . -type d -exec chmod 755 {} \;
-sudo find . -type f -exec chmod 644 {} \;
-```
-
-Create config file:
-
-```
-sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/ziklies.conf
-```
-
-Then edit (as sudo), and adjust DocumentRoot:
-
-```
-DocumentRoot /var/www/ziklies.home.xs4all.nl
-```
-
-And also set server name (needed to make redirects work):
-
-```
-ServerName ziklies.home.xs4all.nl
-```
-
-Activate new config:
-
-```
-sudo a2dissite 000-default.conf
-sudo a2ensite ziklies.conf
-```
-
-Add line to hosts file:
-
-```
-127.0.0.1	ziklies.home.xs4all.nl
-```
-
-Restart server:
-
-```
-sudo systemctl restart apache2
-```
-
-## Enable cgi scripts
-
-Info from [Apache docs](https://httpd.apache.org/docs/2.4/howto/cgi.html) doesn't  seem to work, so followed [this tutorial](https://code-maven.com/set-up-cgi-with-apache) instead.
-
-First copy default cgi config file to custom one:
-
-```
-sudo cp /etc/apache2/conf-available/serve-cgi-bin.conf /etc/apache2/conf-available/serve-cgi-bin-custom.conf
-```
-
-Then edit:
-
-```
-sudo xed /etc/apache2/conf-available/serve-cgi-bin-custom.conf
-```
-Change "Directory" to:
-
-```
-<Directory "/var/www/ziklies.home.xs4all.nl/cgi-bin">
-```
-
-Disable default config:
-
-```
-sudo a2disconf serve-cgi-bin.conf
-```
-
-Enable custom one:
-
-```
-sudo a2enconf serve-cgi-bin-custom.conf
-```
-
-Enable cgi:
-
-```
-sudo a2enmod cgi.load
-```
-
-Restart server:
-
-```
-sudo systemctl reload apache2
-```
-
-Calling script results in "403 Forbidden". Check error log:
-
-```
-xed /var/log/apache2/error.log
-```
-
-Which contains:
-
-```
-[Fri Jun 19 14:40:27.083544 2020] [authz_core:error] [pid 9144:tid 140374009665280] [client 127.0.0.1:39262] AH01630: client denied by server configuration: /usr/lib/cgi-bin/barbie.cgi, referer: http://ziklies.home.xs4all.nl/slaapk/slaap01.html
-```
-
-So it seems server looks for script at wrong location. Changed in "serve-cgi-bin-custom.conf":
-
-```
-ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-```
-
-Into:
-
-```
-ScriptAlias /cgi-bin/ /var/www/ziklies.home.xs4all.nl/cgi-bin/
-```
-
-Then:
-
-```
-sudo a2disconf serve-cgi-bin-custom.conf
-sudo a2enconf serve-cgi-bin-custom.conf
-sudo systemctl reload apache2
-```
-
-After these changes it works!
-
-## More generic method
-
-The ScriptAlias method assumes all scripts are in same dir, which is unpractical if we use the server setup for multiple sites later on. Below configuration (adapted from "User Directories" example [here](https://httpd.apache.org/docs/2.4/howto/cgi.html)) will work for cgi scripts located in any `cgi-bin` folder under `/var/www`:
-
-```
-<IfModule mod_alias.c>
-	<IfModule mod_cgi.c>
-		Define ENABLE_USR_LIB_CGI_BIN
-	</IfModule>
-
-	<IfModule mod_cgid.c>
-		Define ENABLE_USR_LIB_CGI_BIN
-	</IfModule>
-
-	<IfDefine ENABLE_USR_LIB_CGI_BIN>
-		<Directory "/var/www/*/cgi-bin">
-			Options +ExecCGI
-			AddHandler cgi-script .cgi
-		</Directory>
-	</IfDefine>
-</IfModule>
-
-# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
-```
-
-## Mirror demo
-
-<iframe src="https://player.vimeo.com/video/431448257" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-<p><a href="https://vimeo.com/431448257">Mirror</a> from <a href="https://vimeo.com/user75374310">bitsgalore</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
 
 
 ## Scrape local site to warc
@@ -733,7 +569,7 @@ Archived website now accessible from browser at below link:
 
 ## AV formats on toilet page
 
-- Page "toilet.html" links to 3 QuickTime movie files, but this format is not supported by modern web browsers.
+- Page "toilet.html" links to 3 QuickTime movie files, but this format is not supported by modern web browsers (but can be played by external players, so could be fixed by migrating).
 
 - It also links to a Sun Audio (<https://en.wikipedia.org/wiki/Au_file_format>) file.
 
