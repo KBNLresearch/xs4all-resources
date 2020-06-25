@@ -1,4 +1,4 @@
-# Liesbet's atelier restoration notes 
+# Liesbet's atelier restoration notes
 
 These notes describe all processing and analysis steps for the restoration of the Liesbet's Atelier site. Live site still here:
 
