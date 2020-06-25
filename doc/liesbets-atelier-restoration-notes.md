@@ -1,10 +1,10 @@
 # Restoration notes Liesbet's atelier
 
-Live site still here:
+These notes describe all processing and analysis steps for the restoration of the Liesbet's Atelier site. Live site still here:
 
 <https://ziklies.home.xs4all.nl/>
 
-## Scrape site
+## Scrape live site
 
 Wget version: GNU Wget 1.19.4 built on linux-gnu.
 
@@ -386,7 +386,22 @@ This path doesn't exist on my machine, so changed to:
 #!/usr/bin/perl
 ```
 
-After this change the script executes without errors when served with Apache. See also the [Apache setup notes](./liesbets-atelier-apache.md) on how to configure Apache properly.
+After this change the script executes without errors when served with Apache. See also the [Apache setup notes](./liesbets-atelier-apache-notes.md) on how to configure Apache properly.
+
+
+## Inspect site for more scripting
+
+```
+grep -r "/cgi-bin" ~/kb/liesbets-atelier/liesbets-atelier/ > scripts-liesbet.txt
+```
+
+Result [here](./scripts-liesbet.txt).
+
+- Most are refs to scripts at nedstat.nl (offline; actually slows things down a bit)
+- On start.html, new.html: link to voting script http://www.xs4all.nl/cgi-bin/vote/vote.cgi
+
+Nothing that is specific to Liesbet's Atelier, so we can leave this as-is.
+
 
 ## Missing gspot directory + files
 
@@ -451,19 +466,6 @@ How to play these files:
 
 Internet Explorer 11: won't install in Wine! Leave this for now.
 
-## Inspect site for more scripting
-
-```
-grep -r "/cgi-bin" ~/kb/liesbets-atelier/liesbets-atelier/ > scripts-liesbet.txt
-```
-
-Result [here](./scripts-liesbet.txt)
-
-- Most are refs to scripts at nedstat.nl (offline; actually slows things down a bit)
-- On start.html, new.html: link to voting script http://www.xs4all.nl/cgi-bin/vote/vote.cgi
-
-Nothing that is specific to Liesbet's Atelier, so we can leave this as-is.
-
 ## Redaction of guestbook
 
 Following page contains name, email addresses of vistors:
@@ -483,13 +485,3 @@ Attention, some more names here:
 - It also links to a Sun Audio (<https://en.wikipedia.org/wiki/Au_file_format>) file.
 
 Likewise for "e-toilet.html".
-
-## Misc
-
-Bio of creator Liesbet Zikkenheimer:
-
-<http://zicnet.nl/>
-
-Interview:
-
-<https://www.netkwesties.nl/documenten/Interview%20Liesbet%20Zikkenheimer.pdf>
