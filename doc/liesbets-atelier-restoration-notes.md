@@ -374,7 +374,7 @@ BUT submitting the form then results in this:
 FileNotFoundError: [Errno 2] No such file or directory: '/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/cgi-bin/barbie.cgi'
 ```
 
-Unexpected, as neither the form nor the script refer to the `ziklies.home.xs4all.nl` subdomain. After some searching found [this](https://stackoverflow.com/questions/13490311/cgi-scripts-with-python/14739973), which suggests the [Shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) of `barbie.cgi` and `barbie1.cgi` is the problem:
+Unexpected, as neither the form nor the script refer to the `ziklies.home.xs4all.nl` subdomain. After some searching found [this](https://stackoverflow.com/a/14739973/1209004), which suggests the [Shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) of `barbie.cgi` and `barbie1.cgi` is the problem:
 
 ```
 #!/usr/local/bin/perl
@@ -385,7 +385,7 @@ This path doesn't exist on my machine, so changed to:
 ```
 #!/usr/bin/perl
 ```
-
+t
 After this change the script executes without errors when served with Apache. See also the [Apache setup notes](./liesbets-atelier-apache-notes.md) on how to configure Apache properly.
 
 
