@@ -305,18 +305,21 @@ of een emailtje te sturen met gif-plaatje.
 </FORM><br>
 ```
 
-The `ACTION` attribute of the form defines form handler (page with script that handles the submitted form data) `http://www.xs4all.nl/cgi-bin/mail-a-form`. It is documented here:
+The `ACTION` attribute of the form points to a form handler (page with script that handles the submitted form data) `http://www.xs4all.nl/cgi-bin/mail-a-form`. It is documented here:
 
 <https://www.xs4all.nl/service/installeren/hosting/mail-a-form-toevoegen/>
 
+So, all the script does is send an email with the entered form data. 
 
-Moreover the ZIP file contains an old Python script that appears to read a message submitted through the form, and then adds it to the image:
+on the other hand,  the ZIP file provided by Zikkenheimer contains an old Python script that appears to read a message submitted through the form, and generate an image in-place:
 
 ```
 ~/kb/liesbets-atelier/liesbets-atelier-zip/Homepage-html/HOMEPAGE/TOILET/WCMUUR.PY`
 ```
 
-BUT this is an old Python version (1.4), and not clear how I/O works exactly (besides the submit form doesn't do)
+So it looks like this script is not compatible with (this version of) the form.
+
+Also, this is an old Python version (1.4), and not clear how I/O works exactly. In theory updating to Python 3 wouldn't be too difficult, but not clear how it would fit in the site.
 
 Also, as per site's author (email to Kees, October 2019):
 
