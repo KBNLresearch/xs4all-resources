@@ -73,6 +73,8 @@ URL points to external domain that doesn't exist anymore. Changed this to local 
 Ga naar de toilet</a></B>
 ```
 
+Also changed this in image map.
+
 Likewise for "e-start.html" (with URL "e-toilet.html").
 
 ## Image map index page
@@ -181,6 +183,10 @@ Convert to:
     <area shape="default" href="http://www.xs4all.nl/~ziklies/woonk/e-woon01.html">
 </map>
 ```
+
+### Update
+
+As it turns out, image map in Dutch version of the page contains some weirdness (duplicate entries, missing links), so in the end I simply copied the English one over to the Dutch page and then adjusted all links to their Dutch counterparts.
 
 ## Image map overloop.html
 
