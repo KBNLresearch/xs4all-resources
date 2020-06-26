@@ -309,7 +309,7 @@ The `ACTION` attribute of the form points to a form handler (page with script th
 
 <https://www.xs4all.nl/service/installeren/hosting/mail-a-form-toevoegen/>
 
-So, all the script does is send an email with the entered form data. 
+So, all the script does is send an email with the entered form data.
 
 on the other hand,  the ZIP file provided by Zikkenheimer contains an old Python script that appears to read a message submitted through the form, and generate an image in-place:
 
@@ -482,6 +482,36 @@ How to play these files:
 <https://gaming.stackexchange.com/questions/339173/how-can-i-play-dcr-shockwave-games>
 
 Internet Explorer 11: won't install in Wine! Leave this for now.
+
+## Inspect site for more resources referenced through Javascript
+
+
+```
+grep -r "javascript:openit" ~/kb/liesbets-atelier/liesbets-atelier/ > javascript-open.txt
+```
+
+Result:
+
+```
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<A HREF="javascript:openit('gspot/index.html')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<A HREF="javascript:openit('gspot/index.html')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:<B><A HREF="javascript:openit('http://www.xs4all.nl/~astrid/wg.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/e-woon03.html:<A HREF="javascript:openit('tvplus.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/e-woon03.html:<A HREF="javascript:openit('tvmin.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/e-woon03.html:<A HREF="javascript:openit('tvplus.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/woon03.html:<A HREF="javascript:openit('tvplus.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/woon03.html:<I><A HREF="javascript:openit('tvmin.mov')">zonder geluid</A> of 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/woon03.html:<A HREF="javascript:openit('tvplus.mov')">met geluid</A><br></I>
+```
+
+Which reveals video files "tvplus.mov" and "tvmin.mov" in "woonk" directory. 
+
+Fix: add files using `wget`:
+
+```
+wget https://ziklies.home.xs4all.nl/woonk/tvplus.mov
+wget https://ziklies.home.xs4all.nl/woonk/tvmin.mov
+```
 
 ## Redaction of guestbook
 

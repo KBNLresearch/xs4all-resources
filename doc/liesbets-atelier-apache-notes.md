@@ -92,17 +92,16 @@ If all goes well this should load the Apache default page:
 Create directory `ziklies.home.xs4all.nl` in `/var/www`. Then from that directory:
 
 ```
-sudo rsync -avhl /home/johan//kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/ ./
+sudo rsync -avhl /home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/ ./
 ```
 
-Then fix file and directory permissions:
+Then fix file and directory permissions (note that scripts in cgi-bin directory must be executable!):
 
 ```
 sudo find . -type d -exec chmod 755 {} \;
 sudo find . -type f -exec chmod 644 {} \;
+sudo find ./cgi-bin -type f -exec chmod 755 {} \;
 ```
-
-**NOTE**: scripts in cgi-bin directory also need 755! 
 
 ## General site configuration
 
