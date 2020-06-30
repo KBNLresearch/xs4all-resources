@@ -24,6 +24,7 @@ On further inspection also various other items missing. So so scraped again usin
 Here "$1" is a reference to a text file with seeds URLs of the  'toilet' pages + roots of all (sub)directories:
 
 ```
+https://ziklies.home.xs4all.nl/
 https://ziklies.home.xs4all.nl/toilet.html
 https://ziklies.home.xs4all.nl/e-toilet.html
 https://ziklies.home.xs4all.nl/atelier/
