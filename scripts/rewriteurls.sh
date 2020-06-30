@@ -4,7 +4,7 @@
 # by an empty string so references become relative
 
 # Location on file system
-rootDir=/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl
+rootDir=/home/johan/kb/liesbets-atelier/liesbets-atelier-new/ziklies.home.xs4all.nl
 
 # Old and new root domain (used for updating redirects)
 rootOld=http://www.xs4all.nl/~ziklies/

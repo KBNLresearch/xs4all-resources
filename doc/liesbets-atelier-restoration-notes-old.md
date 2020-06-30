@@ -4,6 +4,8 @@ These notes describe all processing and analysis steps for the restoration of th
 
 <https://ziklies.home.xs4all.nl/>
 
+**NOTE**: this is the "old" version of the restoration notes, which is based on an incomplete initial scrape of the live site! Updated (new) notes are available [here](./liesbets-atelier-restoration-notes.md).
+
 ## Scrape live site
 
 Wget version: GNU Wget 1.19.4 built on linux-gnu.
@@ -17,35 +19,24 @@ Script:
 <https://ziklies.home.xs4all.nl/toilet.html>
 <https://ziklies.home.xs4all.nl/e-toilet.html>
 
-On further inspection also various other items missing. So so scraped again using those pages as seeds:
+So scraped again using those pages as seeds:
 
-[scrape-seeds.sh](../scripts/scrape-seeds.sh)
+[scrape-toilet.sh](../scripts/scrape-toilet.sh)
 
-Here "$1" is a reference to a text file with seeds URLs of the  'toilet' pages + roots of all (sub)directories:
+Here "$1" is a reference to a text file with 2 seeds URLs of the  'toilet' pages that are missing from the original capture:  
 
 ```
 https://ziklies.home.xs4all.nl/toilet.html
 https://ziklies.home.xs4all.nl/e-toilet.html
-https://ziklies.home.xs4all.nl/atelier/
-https://ziklies.home.xs4all.nl/bad/
-https://ziklies.home.xs4all.nl/cas/
-https://ziklies.home.xs4all.nl/gambia/
-https://ziklies.home.xs4all.nl/keuken/
-https://ziklies.home.xs4all.nl/slaapk/
-https://ziklies.home.xs4all.nl/slaapk/gspot/
-https://ziklies.home.xs4all.nl/toilet/
-https://ziklies.home.xs4all.nl/woonk/
-https://ziklies.home.xs4all.nl/woonk/agenda/
-https://ziklies.home.xs4all.nl/zolder/
 ```
 
 Diff on both captures:
 
 ```
-diff -r ./wget-site/ziklies.home.xs4all.nl/ ./wget-folders/ziklies.home.xs4all.nl/ > diff-site-folders.txt
+diff -r ./wget-site/ziklies.home.xs4all.nl/ ./wget-toilet/ziklies.home.xs4all.nl/ > diff-site-toilet.txt
 ```
 
-Result: new capture contains everything that is also in the "regular" capture + 67 additional files/folders.
+Result: "toilet" capture contains everything that is also in the "regular" capture.
 
 ## Keep track of changes
 
@@ -67,22 +58,6 @@ Subsequently the contents of the directory can be accessed from <http://127.0.0.
 More info here:
 
 [How do you set up a local testing server?](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server)
-
-## Replace links to website root
-
-For internal links site uses a mixture of relative URLs (which work fine) and absolute ones that use the website root `http://www.xs4all.nl/~ziklies/`, which is forwarded by X4ALL to `https://ziklies.home.xs4all.nl/`. This causes some issues, so I've rewritten these absolute internal URLs as relative links. Script:
-
-<https://github.com/KBNLresearch/xs4all-resources/blob/master/scripts/rewriteurls.sh>
-
-BUT note that this affects the appearance of the statistics page:
-
-<http://127.0.0.1:8000/statistics.html>
-
-Fixed this by undoing commit for this one single file using:
-
-```
-git checkout HEAD^ -- ziklies.home.xs4all.nl/statistics.html
-```
 
 ## Fix links to toilet
 
@@ -282,6 +257,23 @@ Convert to:
     <area shape="default" href="http://www.xs4all.nl/~ziklies/trapaf.html">
 </map>
 ```
+
+## Replace links to website root
+
+For internal links site uses a mixture of relative URLs (which work fine) and absolute ones that use the website root `http://www.xs4all.nl/~ziklies/`, which is forwarded by X4ALL to `https://ziklies.home.xs4all.nl/`. This causes some issues, so I've rewritten these absolute internal URLs as relative links. Script:
+
+<https://github.com/KBNLresearch/xs4all-resources/blob/master/scripts/rewriteurls.sh>
+
+BUT note that this affects the appearance of the statistics page:
+
+<http://127.0.0.1:8000/statistics.html>
+
+Fixed this by undoing commit for this one single file using:
+
+```
+git checkout HEAD^ -- ziklies.home.xs4all.nl/statistics.html
+```
+
 ## Find forms
 
 ```
@@ -399,6 +391,7 @@ Script `barbie.cgi` (and `barbie1.cgi` for English version) included in ZIP file
 3. Make it executable using `chmod 755 barbie.cgi`
 4. Start server with `--cgi` flag, i.e. `python3 -m http.server --cgi`
 5. Inside scripts, replace `http://www.xs4all.nl/~ziklies/` with `/`.
+6. Copy the 21 1A.GIF ... 7C.GIF files to `slaapk`, and change name + extension to lowercase (see also <https://ziklies.home.xs4all.nl/slaapk/>).
 
 BUT submitting the form then results in this:
 
@@ -434,25 +427,57 @@ Result [here](./scripts-liesbet.txt).
 
 Nothing that is specific to Liesbet's Atelier, so we can leave this as-is.
 
-## Redaction of guestbook
 
-Following page contains name, email addresses of vistors:
+## Missing gspot directory + files
 
-<http://ziklies.home.xs4all.nl/gasten.html>
+This directory is missing from scraped site (and ZIP as well) because it is only referenced through JavaScript:
 
-Must be redacted for a public version (assuming there'll even be a public version at all, which is unsure at this point).
+<https://ziklies.home.xs4all.nl/slaapk/gspot/>
 
-Attention, some more names here:
+Javascript reference (in `slaap01.html` + English version)
 
-<http://ziklies.home.xs4all.nl/slaapk/lijst.html>
+```
+<A HREF="javascript:openit('gspot/index.html')">
+```
 
-## Formats
+File source:
 
-Page "toilet.html" links to 3 QuickTime movie files, but this format is not supported by modern web browsers (but can be played by external players, so could be fixed by migrating). It also links to a Sun Audio (<https://en.wikipedia.org/wiki/Au_file_format>) file.Likewise for "e-toilet.html".
+```
+<HTML>
+<HEAD>
+<TITLE>G_spot</TITLE>
+</HEAD>
+<BODY BGCOLOR="#000000" LINK="#E7E801" VLINK="#E7E801">
+<TABLE BORDER="0" CELLSPACING="0" WIDTH=100% HEIGHT=100%>
+<TR >
+<TD ALIGN=CENTER VALIGN=MIDDLE>
+<FONT FACE="arial,helvetica" SIZE=3 COLOR="#E7E801">
+<embed SRC="gspot.dcr" BGCOLOR=#000000 WIDTH=512 HEIGHT=320> 
+</font>
+</td>
+</tr>
+</table>
+</body>
+</html>
+```
 
-Bedroom page links to [this](https://ziklies.home.xs4all.nl/slaapk/gspot/index.html), which in turn [links](https://ziklies.home.xs4all.nl/slaapk/gspot/gspot.dcr) to an embedded [Adobe Shockwave file](https://en.wikipedia.org/wiki/Adobe_Shockwave).
+Note referenced file `gspot.dcr`. These files are also missing from the ZIP file. 
 
-More info here:
+Fix:
+
+1. Manually create `gspot` directory
+2. Add files using `wget`:
+   - `wget https://ziklies.home.xs4all.nl/slaapk/gspot/index.html`
+   - `wget https://ziklies.home.xs4all.nl/slaapk/gspot/gspot.dcr`
+
+But what is a .dcr file?
+
+- Caja file manager: Kodak DCR Raw image
+- File: RIFF (big-endian) data
+- Siegfried: 'Macromedia (Adobe) Director Compressed Resource file' ('extension match dcr; byte match at 0, 12 (signature 1/2)')
+- Apache Tika: application/x-director
+
+So actually a Shockwave file. More info here:
 
 <http://fileformats.archiveteam.org/wiki/Shockwave_(Director)>
 
@@ -465,3 +490,53 @@ How to play these files:
 <https://gaming.stackexchange.com/questions/339173/how-can-i-play-dcr-shockwave-games>
 
 Internet Explorer 11: won't install in Wine! Leave this for now.
+
+## Inspect site for more resources referenced through Javascript
+
+
+```
+grep -r "javascript:openit" ~/kb/liesbets-atelier/liesbets-atelier/ > javascript-open.txt
+```
+
+Result:
+
+```
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/e-slaap1.html:<A HREF="javascript:openit('gspot/index.html')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/slaapk/slaap01.html:<A HREF="javascript:openit('gspot/index.html')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/start.html:<B><A HREF="javascript:openit('http://www.xs4all.nl/~astrid/wg.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/e-woon03.html:<A HREF="javascript:openit('tvplus.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/e-woon03.html:<A HREF="javascript:openit('tvmin.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/e-woon03.html:<A HREF="javascript:openit('tvplus.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/woon03.html:<A HREF="javascript:openit('tvplus.mov')">
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/woon03.html:<I><A HREF="javascript:openit('tvmin.mov')">zonder geluid</A> of 
+/home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/woonk/woon03.html:<A HREF="javascript:openit('tvplus.mov')">met geluid</A><br></I>
+```
+
+Which reveals video files "tvplus.mov" and "tvmin.mov" in "woonk" directory. 
+
+Fix: add files using `wget`:
+
+```
+wget https://ziklies.home.xs4all.nl/woonk/tvplus.mov
+wget https://ziklies.home.xs4all.nl/woonk/tvmin.mov
+```
+
+## Redaction of guestbook
+
+Following page contains name, email addresses of vistors:
+
+<http://ziklies.home.xs4all.nl/gasten.html>
+
+So redacted them out for public version (assuming there'll even be a public version at all, which is unsure at this point). Redacted version in branch "public-redacted" of Git repo.
+
+Attention, some more names here:
+
+<http://ziklies.home.xs4all.nl/slaapk/lijst.html>
+
+## AV formats on toilet page
+
+- Page "toilet.html" links to 3 QuickTime movie files, but this format is not supported by modern web browsers (but can be played by external players, so could be fixed by migrating).
+
+- It also links to a Sun Audio (<https://en.wikipedia.org/wiki/Au_file_format>) file.
+
+Likewise for "e-toilet.html".
