@@ -166,7 +166,7 @@ Then 2 options to link `/cgi-bin` to actual directory location::
 
     This works, but the ScriptAlias method assumes all scripts are in same dir, which is unpractical if we use the server setup for multiple sites later on.
 
-2. Use below configuration (adapted from "User Directories" example [here](https://httpd.apache.org/docs/2.4/howto/cgi.html)). This will work for cgi scripts located in *any* `cgi-bin` folder under `/var/www`:
+2. Use below configuration (adapted from "User Directories" example [here](https://httpd.apache.org/docs/2.4/howto/cgi.html)). This will work for cgi scripts with a .cgi or .py file extension located in *any* `cgi-bin` folder under `/var/www`:
 
     ```
     <IfModule mod_alias.c>
@@ -181,7 +181,7 @@ Then 2 options to link `/cgi-bin` to actual directory location::
         <IfDefine ENABLE_USR_LIB_CGI_BIN>
             <Directory "/var/www/*/cgi-bin">
                 Options +ExecCGI
-                AddHandler cgi-script .cgi
+                AddHandler cgi-script .cgi .py
             </Directory>
         </IfDefine>
     </IfModule>
