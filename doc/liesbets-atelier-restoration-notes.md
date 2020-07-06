@@ -298,7 +298,7 @@ Result:
 /home/johan/kb/liesbets-atelier/liesbets-atelier/ziklies.home.xs4all.nl/e-toilet.html:<FORM METHOD="POST" ACTION="/cgi-bin/mail-a-form">
 ```
 
-## Mail form, toilet page
+## Interactive toilet door
 
 Page:
 
@@ -328,17 +328,21 @@ The `ACTION` attribute of the form points to a form handler (page with script th
 
 So, all the script does is send an email with the entered form data.
 
-on the other hand,  the ZIP file provided by Zikkenheimer contains an old Python script that appears to read a message submitted through the form, and generate an image in-place:
+On the other hand,  the ZIP file provided by Zikkenheimer contains an old Python script that appears to read a message submitted through the form, and generate an image in-place.
 
+Digging into Internet Archive brought up this old version of the page (which was hosted on a separate server):
+
+<https://web.archive.org/web/19981205234146/http://prima12.xs4all.nl/liesbet/toilet.html>
+
+This also refers to the script from the ZIP file:
+
+```html
+<form method="POST" action="/web/19981205234146/http://prima12.xs4all.nl/cgi-bin/Liesbet/wcmuur.py">
+
+<input type="text" name="toiletmessage" value="kras hier" size="60">
 ```
-~/kb/liesbets-atelier/liesbets-atelier-zip/Homepage-html/HOMEPAGE/TOILET/WCMUUR.PY`
-```
 
-So it looks like this script is not compatible with (this version of) the form.
-
-Also, this is an old Python version (1.4), and not clear how I/O works exactly. In theory updating to Python 3 wouldn't be too difficult, but not clear how it would fit in the site.
-
-Also, as per site's author (email to Kees, October 2019):
+So the toilet.html/e-toilet.html pages are most likely (very) old versions that pre-date the switch to the python-based version. This is consistent with the author's explanation (email to Kees, October 2019):
 
 > Het scriptje voor de toiletdeur is er misschien niet meer.
 > Was door een Delftse student gemaakt en misschien direct in de juiste map
@@ -346,6 +350,13 @@ Also, as per site's author (email to Kees, October 2019):
 > Zou het niet meer precies weten.
 > In eerste instantie maakte ik zelf met de hand een update van de
 > toiletdeur. Pas later kwam er dat scriptje.
+
+I did an attempt at restoring the script, but ran into several problems:
+
+- It is based on an ancient (1.4) Python version. It also uses [gdmodule](https://github.com/Solomoriah/gdmodule) which is [not supported](https://github.com/Solomoriah/gdmodule/issues/3) in Python 3.
+- I managed to upgrade the script and get the core functionality work under Python 2.7 (adding text to image works), but when integrating into site I keep getting "malformed header from script" / "Bad header" errors.
+- Also ZIP file only contains GIFs for lowercase characters (with "u" strangely missing!), no numbers, uppercase, etc.
+- This makes me wonder if script in ZIP was really the production version.
 
 **Action:** leave as-is for now.
 
