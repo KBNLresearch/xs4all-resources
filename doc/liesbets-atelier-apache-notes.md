@@ -213,3 +213,29 @@ sudo systemctl restart apache2
 ```
 
 All done!
+
+## Set permissions if scripts need write access
+
+The script "wcmuur.py" needs write access to the following image on the server:
+
+```
+/var/www/ziklies.home.xs4all.nl/toilet/wctxt.gif
+```
+
+Following instructions [here](https://stackoverflow.com/a/33622448/1209004):
+
+```
+sudo chgrp www-data /var/www/ziklies.home.xs4all.nl/toilet
+sudo chmod g+rwx /var/www/ziklies.home.xs4all.nl/toilet
+```
+
+(Apache server runs as user www-data.)
+
+Make existing files in directory writable:
+
+```
+sudo chgrp www-data /var/www/ziklies.home.xs4all.nl/toilet/*
+sudo chmod g+rw /var/www/ziklies.home.xs4all.nl/toilet/*
+```
+
+Note that giving Apache write access is a potential security risk!
