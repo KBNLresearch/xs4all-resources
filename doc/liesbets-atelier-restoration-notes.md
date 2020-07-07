@@ -354,11 +354,9 @@ So the toilet.html/e-toilet.html pages are most likely (very) old versions that 
 I did an attempt at restoring the script, but ran into several problems:
 
 - It is based on an ancient (1.4) Python version. It also uses [gdmodule](https://github.com/Solomoriah/gdmodule) which is [not supported](https://github.com/Solomoriah/gdmodule/issues/3) in Python 3.
-- I managed to upgrade the script and get the core functionality work under Python 2.7 (adding text to image works), but when integrating into site I keep getting "malformed header from script" / "Bad header" errors.
-- Also ZIP file only contains GIFs for lowercase characters (with "u" strangely missing!), no numbers, uppercase, etc.
-- This makes me wonder if script in ZIP was really the production version.
-
-**Action:** leave as-is for now.
+- I managed to upgrade the script and get the core functionality work under Python 2.7 (adding text to image works), but this requires that the web server has write access to the directory on the server where the image is located, which could be a security risk.
+- Also ZIP file only contains GIFs for lowercase characters (with "u" strangely missing!), no numbers, uppercase, etc. Entering any of these characters results in an "Internal Server Error".
+- Placement of the text on the GIF also doesn't seem quite right. Not clear if this was the behaviour of the original script, or something introduced with my modifications (especially replacement of obsolete "rand" function).
 
 ## Slaapkamer form
 
