@@ -358,6 +358,10 @@ I did an attempt at restoring the script, but ran into several problems:
 - Also ZIP file only contains GIFs for lowercase characters (with "u" strangely missing!), no numbers, uppercase, etc. Entering any of these characters results in an "Internal Server Error".
 - Placement of the text on the GIF also doesn't seem quite right. Not clear if this was the behaviour of the original script, or something introduced with my modifications (especially replacement of obsolete "rand" function).
 
+Also note some old versions of toilet door are still in Internet Archive: 
+
+<https://web.archive.org/web/2003*/http://imagine.xs4all.nl:80/ziklies/wctxt.gif?XXX>
+
 ## Slaapkamer form
 
 ```
